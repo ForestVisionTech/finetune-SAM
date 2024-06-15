@@ -9,17 +9,16 @@ def parse_args():
     
     parser.add_argument('-img_folder', type=str, default='./datasets/', help='the folder putting images')
     parser.add_argument('-mask_folder', type=str, default='./datasets/', help='the folder putting masks')
-    parser.add_argument('-train_img_list', type=str, default='./datasets/train.csv')
-    parser.add_argument('-val_img_list', type=str,default='./datasets/val.csv')
-    parser.add_argument('-targets', type=str,default='combine_all')
 
     parser.add_argument('-finetune_type', type=str, default='adapter', help='normalization type, pick among vanilla,adapter,lora')
     parser.add_argument('-normalize_type', type=str, default='sam', help='normalization type, pick between sam or medsam')
     
     parser.add_argument('-dir_checkpoint', type=str, default='checkpoints', help='the checkpoint folder to save final model')
     parser.add_argument('-num_cls', type=int, default=2, help='the number of output channels (need to be your target cls num +1)')
-    parser.add_argument('-epochs', type=int, default=200, help='the number of largest epochs to train')
-    parser.add_argument('-sam_ckpt', type=str, default='sam_vit_b_01ec64.pth', help='the path to the checkpoint to load')
+    parser.add_argument('-epochs', type=int, default=10, help='the number of largest epochs to train')
+    # TODO: change the epochs to 200
+    # parser.add_argument('-sam_ckpt', type=str, default='sam_vit_b_01ec64.pth', help='the path to the checkpoint to load')
+    parser.add_argument('-sam_ckpt', type=str, default='mobile_sam.pt', help='the path to the checkpoint to load')
     
     parser.add_argument('-type', type=str, default='map', help='condition type:ave,rand,rand_map')
     parser.add_argument('-vis', type=int, default=None, help='visualization')
@@ -37,8 +36,8 @@ def parse_args():
     parser.add_argument('-depth', type=int, default=64, help='depth')
     parser.add_argument('-heads', type=int, default=16, help='heads number')
     parser.add_argument('-mlp_dim', type=int, default=1024, help='mlp_dim')
-    parser.add_argument('-w', type=int, default=4, help='number of workers for dataloader')
-    parser.add_argument('-b', type=int, default=4, help='batch size for dataloader')
+    parser.add_argument('-w', type=int, default=1, help='number of workers for dataloader')
+    parser.add_argument('-b', type=int, default=1, help='batch size for dataloader')
     parser.add_argument('-s', type=bool, default=True, help='whether shuffle the dataset')
     parser.add_argument('-if_warmup', type=bool, default=False, help='if warm up training phase')
     parser.add_argument('-warmup_period', type=int, default=200, help='warm up training phase')
@@ -57,10 +56,10 @@ def parse_args():
 
     parser.add_argument('-if_update_encoder', type=bool, default=False , help='if update_image_encoder')
     parser.add_argument('-if_encoder_adapter', type=bool, default=False , help='if add adapter to encoder')
-    
     parser.add_argument('-encoder-adapter-depths', type=list, default=[0,1,10,11] , help='the depth of blocks to add adapter')
     parser.add_argument('-if_mask_decoder_adapter', type=bool, default=False , help='if add adapter to mask decoder')
     parser.add_argument('-decoder_adapt_depth', type=int, default=2, help='the depth of the decoder adapter')
+    parser.add_argument('-encoder_depth_layer', type=list, default=[0,1,2,3], help='the layer of the depth adapter')
     
     parser.add_argument('-if_encoder_lora_layer', type=bool, default=False , help='if add lora to encoder')
     parser.add_argument('-if_decoder_lora_layer', type=bool, default=False , help='if add lora to decoder')
@@ -72,6 +71,10 @@ def parse_args():
     
   
     parser.add_argument('-evl_chunk', type=int, default=None , help='evaluation chunk')
+
+    parser.add_argument('-train_img_list', type=str, default=None)
+    parser.add_argument('-val_img_list', type=str, default=None)
+    parser.add_argument('-targets', type=str, default=None)
     opt = parser.parse_args()
 
     return opt

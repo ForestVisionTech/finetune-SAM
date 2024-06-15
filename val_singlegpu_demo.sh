@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set CUDA device
-export CUDA_VISIBLE_DEVICES="5"
+# export CUDA_VISIBLE_DEVICES="5"
 
 # Define variables
 arch="vit_b"  # Change this value as needed
@@ -18,4 +18,5 @@ python val_finetune_noprompt.py \
     -arch "$arch" \
     -if_mask_decoder_adapter True \
     -dataset_name "$dataset_name" \
-    -dir_checkpoint "$dir_checkpoint"
+    -dir_checkpoint "$dir_checkpoint" \
+    -targets "$targets"
